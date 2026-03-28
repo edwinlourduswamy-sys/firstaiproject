@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>HabitFlow — Habit & Action Tracker</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- ── Header ── -->
+  <header>
+    <div class="header-inner">
+      <div class="logo">
+        <span class="logo-icon">✦</span>
+        <h1>HabitFlow</h1>
+      </div>
+      <div class="view-toggle">
+        <button class="toggle-btn active" data-view="today">Today</button>
+        <button class="toggle-btn" data-view="week">Week</button>
+      </div>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- ── Dashboard ── -->
+    <section class="dashboard">
+      <div class="stat-card">
+        <span class="stat-value" id="stat-total">0</span>
+        <span class="stat-label">Total Tasks</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="stat-completed">0</span>
+        <span class="stat-label">Completed</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="stat-streak">0</span>
+        <span class="stat-label">Day Streak 🔥</span>
+      </div>
+      <div class="stat-card">
+        <span class="stat-value" id="stat-percent">0%</span>
+        <span class="stat-label">Completion</span>
+      </div>
+    </section>
+
+    <!-- ── 30-Day Heatmap ── -->
+    <section class="heatmap-section">
+      <h2 class="section-title">30-Day Activity</h2>
+      <div class="heatmap" id="heatmap"></div>
+      <div class="heatmap-legend">
+        <span>Less</span>
+        <div class="legend-cell level-0"></div>
+        <div class="legend-cell level-1"></div>
+        <div class="legend-cell level-2"></div>
+        <div class="legend-cell level-3"></div>
+        <span>More</span>
+      </div>
+    </section>
+
+    <!-- ── Category Filters ── -->
+    <section class="filters">
+      <button class="filter-btn active" data-cat="all">All</button>
+      <button class="filter-btn" data-cat="health">
+        <span class="cat-dot health"></span> Health &amp; Fitness
+      </button>
+      <button class="filter-btn" data-cat="work">
+        <span class="cat-dot work"></span> Work &amp; Productivity
+      </button>
+      <button class="filter-btn" data-cat="learning">
+        <span class="cat-dot learning"></span> Learning &amp; Growth
+      </button>
+    </section>
+
+    <!-- ── Quick-Add Bar ── -->
+    <section class="quick-add">
+      <input type="text" id="quick-title" placeholder="Quick-add a task… (press Enter)">
+      <select id="quick-category">
+        <option value="health">Health</option>
+        <option value="work">Work</option>
+        <option value="learning">Learning</option>
+      </select>
+      <select id="quick-timeblock">
+        <option value="morning">Morning</option>
+        <option value="afternoon">Afternoon</option>
+        <option value="evening">Evening</option>
+      </select>
+      <button id="quick-add-btn">+ Add</button>
+      <button id="open-modal-btn">⊕ Full Add</button>
+    </section>
+
+    <!-- ── Today View ── -->
+    <div id="today-view">
+      <div class="time-block">
+        <div class="time-block-header">
+          <span class="block-icon">🌅</span>
+          <h2>Morning</h2>
+          <span class="task-count" id="count-morning">0</span>
+        </div>
+        <div class="task-list" id="tasks-morning"></div>
+      </div>
+      <div class="time-block">
+        <div class="time-block-header">
+          <span class="block-icon">☀️</span>
+          <h2>Afternoon</h2>
+          <span class="task-count" id="count-afternoon">0</span>
+        </div>
+        <div class="task-list" id="tasks-afternoon"></div>
+      </div>
+      <div class="time-block">
+        <div class="time-block-header">
+          <span class="block-icon">🌙</span>
+          <h2>Evening</h2>
+          <span class="task-count" id="count-evening">0</span>
+        </div>
+        <div class="task-list" id="tasks-evening"></div>
+      </div>
+    </div>
+
+    <!-- ── Week View ── -->
+    <div id="week-view" class="hidden">
+      <div class="week-grid" id="week-grid"></div>
+    </div>
+
+  </main>
+
+  <!-- ── Full-Add Modal ── -->
+  <div class="modal-overlay hidden" id="modal-overlay">
+    <div class="modal">
+      <div class="modal-header">
+        <h2>Add Task</h2>
+        <button class="modal-close" id="modal-close" aria-label="Close">✕</button>
+      </div>
+      <form id="task-form" novalidate>
+        <div class="form-group">
+          <label for="form-title">Title</label>
+          <input type="text" id="form-title" placeholder="What do you want to do?" required>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="form-category">Category</label>
+            <select id="form-category">
+              <option value="health">Health &amp; Fitness</option>
+              <option value="work">Work &amp; Productivity</option>
+              <option value="learning">Learning &amp; Growth</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="form-timeblock">Time Block</label>
+            <select id="form-timeblock">
+              <option value="morning">Morning</option>
+              <option value="afternoon">Afternoon</option>
+              <option value="evening">Evening</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="form-duetime">Due Time</label>
+            <input type="time" id="form-duetime">
+          </div>
+          <div class="form-group">
+            <label for="form-priority">Priority</label>
+            <select id="form-priority">
+              <option value="high">High</option>
+              <option value="med" selected>Medium</option>
+              <option value="low">Low</option>
+            </select>
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Recurrence</label>
+          <div class="recurrence-options">
+            <label class="radio-label">
+              <input type="radio" name="recurrence" value="daily" checked> Daily
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="recurrence" value="weekdays"> Weekdays
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="recurrence" value="weekly"> Weekly
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="recurrence" value="one-time"> One-time
+            </label>
+          </div>
+        </div>
+        <div class="form-group">
+          <label for="form-notes">Notes</label>
+          <textarea id="form-notes" placeholder="Optional notes…" rows="3"></textarea>
+        </div>
+        <div class="form-actions">
+          <button type="button" id="cancel-btn">Cancel</button>
+          <button type="submit" class="btn-primary">Add Task</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>
